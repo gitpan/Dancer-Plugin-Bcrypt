@@ -11,7 +11,11 @@ use Crypt::Eksblowfish::Bcrypt qw/en_base64/;
 use Crypt::Random::Source;
 
 
-register bcrypt => sub {
+register bcrypt => \&bcrypt;
+register bcrypt_validate_password => \&bcrypt_validate_password;
+
+
+sub bcrypt {
     my ($plaintext, $bcrypted) = @_;
 
     return if !$plaintext;
@@ -51,6 +55,17 @@ register bcrypt => sub {
 };
 
 
+sub bcrypt_validate_password {
+    my ($plaintext, $bcrypted) = @_;
+
+    if ($plaintext && $bcrypted) {
+        return bcrypt($plaintext, $bcrypted) eq $bcrypted;
+    } else {
+        return;
+    }    
+}
+
+
 sub sanity_check {
     my $config = plugin_setting;
 
@@ -66,7 +81,7 @@ sub sanity_check {
     };
 
     # Can only specify weak or strong as random_factor
-    unless ( $config->{random_factor} ~~ ['strong', 'weak'] ) {
+    unless ( grep { $_ eq $config->{random_factor} } ('strong', 'weak') ) {
         $config->{random_factor} = 'weak';
     }
 
@@ -82,9 +97,9 @@ sub generate_salt {
 
     if ($type eq 'strong') {
         return Crypt::Random::Source::get_strong(16);
+    } else {
+        return Crypt::Random::Source::get_weak(16);
     }
-
-    return Crypt::Random::Source::get_weak(16);
 }
 
 
@@ -102,7 +117,7 @@ Dancer::Plugin::Bcrypt - Bcrypt interface for Dancer
 
 =head1 VERSION
 
-version 0.1.0
+version 0.2.0
 
 
 =head1 DESCRIPTION
@@ -136,8 +151,6 @@ can be increased to keep up with the ever increasing power of computers.
 
 =head2 bcrypt
 
-The only keyword provided by this plugin.
-
 Pass it a plaintext password, and it will return a string suitable for
 storage, using the settings specified in the app config.
 
@@ -153,6 +166,16 @@ You would use this to verify that a password provided by a user matches the
 hash you have stored in the database.
 
     my $hash = bcrypt($plaintext, $stored_hash);
+
+=head1 bcrypt_validate_password
+
+Pass it a plaintext password and the crypted password you have stored, and it
+will return a boolean to indicate whether the plaintext password entered is
+correct (it hashes to the same has the stored hash).
+
+    if (bcrypt_validate_password($entered_password, $stored_hash)) {
+        ...
+    }
 
 
 =head1 USAGE
@@ -170,13 +193,10 @@ hash you have stored in the database.
 
         # Validate password provided by user against stored hash.
         my $stored_hash = ''; # [...] retreive password from the DB.
-
-        my $hash = bcrypt(param('password'), $stored_hash);
-
-        if ($hash == $stored_hash) {
-            # Password matched!
+        
+        if (bcrypt_validate_password(param('password'), $stored_hash)) {
+            # Entered password matches
         }
-
         
     };
 
