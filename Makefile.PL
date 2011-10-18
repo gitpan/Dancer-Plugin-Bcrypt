@@ -9,27 +9,29 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'Bcrypt interface for Dancer',
-  'AUTHOR' => 'James Aitken <jaitken@cpan.org>',
-  'BUILD_REQUIRES' => {
-    'Test::More' => '0'
+  "ABSTRACT" => "Bcrypt interface for Dancer",
+  "AUTHOR" => "James Aitken <jaitken\@cpan.org>",
+  "BUILD_REQUIRES" => {
+    "Test::More" => 0,
+    "warnings" => 0
   },
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.30'
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
   },
-  'DISTNAME' => 'Dancer-Plugin-Bcrypt',
-  'EXE_FILES' => [],
-  'LICENSE' => 'perl',
-  'NAME' => 'Dancer::Plugin::Bcrypt',
-  'PREREQ_PM' => {
-    'Crypt::Eksblowfish::Bcrypt' => '0',
-    'Crypt::Random::Source' => '0',
-    'Dancer::Config' => '0',
-    'Dancer::Plugin' => '0'
+  "DISTNAME" => "Dancer-Plugin-Bcrypt",
+  "EXE_FILES" => [],
+  "LICENSE" => "perl",
+  "NAME" => "Dancer::Plugin::Bcrypt",
+  "PREREQ_PM" => {
+    "Crypt::Eksblowfish::Bcrypt" => 0,
+    "Crypt::Random::Source" => 0,
+    "Dancer::Config" => 0,
+    "Dancer::Plugin" => 0,
+    "strict" => 0
   },
-  'VERSION' => '0.3.0',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "VERSION" => "0.4.0",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 
