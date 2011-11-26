@@ -9,7 +9,7 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "Bcrypt interface for Dancer",
+  "ABSTRACT" => "DEPRECATED Bcrypt interface for Dancer",
   "AUTHOR" => "James Aitken <jaitken\@cpan.org>",
   "BUILD_REQUIRES" => {
     "Test::More" => 0,
@@ -29,7 +29,7 @@ my %WriteMakefileArgs = (
     "Dancer::Plugin" => 0,
     "strict" => 0
   },
-  "VERSION" => "0.4.0",
+  "VERSION" => "0.4.1",
   "test" => {
     "TESTS" => "t/*.t"
   }
